@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FC Youth Baseball | Southern Indiana</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --blue: #0078ab;
+      --blue-dark: #005a82;
+      --blue-light: #0099d6;
+      --white: #ffffff;
+      --black: #000000;
+      --gray: #f4f6f8;
+      --gray-mid: #cccccc;
+      --text: #1a1a1a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(0,0,0,0.92); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 70px; border-bottom: 2px solid var(--blue);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo img { height: 48px; width: 48px; object-fit: contain; }
+    .nav-logo span { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--white); letter-spacing: 0.04em; line-height: 1.2; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--gray-mid); text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.95rem; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--blue-light); }
+    .nav-cta { background: var(--blue); color: var(--white) !important; padding: 8px 20px; border-radius: 4px; transition: background 0.2s !important; }
+    .nav-cta:hover { background: var(--blue-light) !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); transition: all 0.3s; }
+
+    /* ── HERO BASEBALLS ── */
+    .hero-ball {
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+      will-change: transform;
+    }
+    .hero-ball svg {
+      width: 100%;
+      height: 100%;
+    }
+    #home {
+      min-height: 100vh; background: var(--black);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 120px 24px 80px; position: relative; overflow: hidden;
+    }
+    #home::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 60%, rgba(0,120,171,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #home::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 80px;
+      background: var(--white); clip-path: polygon(0 100%, 100% 0, 100% 100%);
+    }
+    .hero-logo { width: 140px; height: 140px; object-fit: contain; margin-bottom: 28px; animation: fadeDown 0.8s ease both; filter: drop-shadow(0 0 24px rgba(0,120,171,0.5)); position: relative; z-index: 1; }
+    .hero-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue-light); margin-bottom: 16px; animation: fadeDown 0.8s 0.1s ease both; position: relative; z-index: 1; }
+    .hero-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(3rem, 8vw, 6rem); line-height: 0.95; color: var(--white); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 8px; animation: fadeDown 0.8s 0.2s ease both; position: relative; z-index: 1; }
+    .hero-title span { color: var(--blue-light); }
+    .hero-sub { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: clamp(1.1rem, 3vw, 1.6rem); color: var(--gray-mid); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 28px; animation: fadeDown 0.8s 0.3s ease both; position: relative; z-index: 1; }
+    .hero-tagline { font-size: 1.1rem; color: rgba(255,255,255,0.75); max-width: 520px; line-height: 1.6; margin-bottom: 40px; animation: fadeDown 0.8s 0.4s ease both; position: relative; z-index: 1; }
+    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; animation: fadeDown 0.8s 0.5s ease both; position: relative; z-index: 1; }
+
+    /* ── BUTTONS ── */
+    .btn { display: inline-block; padding: 14px 32px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; }
+    .btn-primary { background: var(--blue); color: var(--white); }
+    .btn-primary:hover { background: var(--blue-light); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.4); }
+    .btn-outline:hover { border-color: var(--white); transform: translateY(-2px); }
+
+    /* ── SECTIONS ── */
+    section { padding: 90px 24px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
+    .section-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1; text-transform: uppercase; color: var(--black); margin-bottom: 20px; }
+    .section-title span { color: var(--blue); }
+
+    /* ── MISSION ── */
+    #mission { background: var(--white); }
+    .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .mission-text p { font-size: 1.05rem; line-height: 1.75; color: #444; margin-bottom: 16px; }
+    .mission-text p:last-child { margin-bottom: 0; }
+    .mission-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .stat-card { background: var(--black); padding: 28px 24px; border-radius: 6px; border-left: 4px solid var(--blue); text-align: center; }
+    .stat-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 2.8rem; color: var(--blue-light); line-height: 1; margin-bottom: 6px; }
+    .stat-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-mid); }
+
+    /* ── ABOUT ── */
+    #about { background: var(--gray); position: relative; overflow: hidden; }
+    #about .grid-bg {
+      position: absolute; inset: -50%; width: 200%; height: 200%;
+      background-image: linear-gradient(rgba(0,0,0,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.07) 1px, transparent 1px);
+      background-size: 80px 80px; will-change: transform; pointer-events: none;
+    }
+    #about .container { position: relative; z-index: 1; }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .about-photo { border-radius: 8px; overflow: hidden; aspect-ratio: 4/5; }
+    .about-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    .about-text p { font-size: 1.05rem; line-height: 1.75; color: #444; margin-bottom: 16px; }
+    .about-text p:last-child { margin-bottom: 0; }
+
+    /* ── DONATE ── */
+    #donate { background: var(--black); text-align: center; position: relative; overflow: hidden; }
+    #donate::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(0,120,171,0.15) 0%, transparent 65%); pointer-events: none; }
+    #donate .section-title { color: var(--white); }
+    #donate .section-label { color: var(--blue-light); }
+    .donate-desc { font-size: 1.1rem; color: rgba(255,255,255,0.7); max-width: 560px; margin: 0 auto 40px; line-height: 1.7; }
+    .donate-placeholder { display: inline-block; background: rgba(0,120,171,0.15); border: 2px dashed rgba(0,120,171,0.5); color: rgba(255,255,255,0.5); padding: 20px 40px; border-radius: 6px; font-family: 'Barlow Condensed', sans-serif; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px; }
+
+    /* ── SIGN UP ── */
+    #signup { background: var(--white); }
+    .signup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+    .signup-intro p { font-size: 1.05rem; line-height: 1.75; color: #444; margin-bottom: 16px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--black); margin-bottom: 6px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 4px; font-family: 'Barlow', sans-serif; font-size: 1rem; color: var(--text); background: var(--white); transition: border-color 0.2s; outline: none; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--blue); }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-submit { width: 100%; padding: 16px; background: var(--blue); color: var(--white); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.12em; text-transform: uppercase; border: none; border-radius: 4px; cursor: pointer; transition: background 0.2s, transform 0.2s; }
+    .form-submit:hover { background: var(--blue-light); transform: translateY(-2px); }
+    .form-success { display: none; background: #e6f7ed; border: 2px solid #4caf50; color: #2e7d32; padding: 16px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; letter-spacing: 0.05em; text-align: center; margin-top: 12px; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--gray); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+    .contact-item { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 28px; }
+    .contact-icon { width: 44px; height: 44px; background: var(--blue); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .contact-icon svg { width: 20px; height: 20px; fill: var(--white); }
+    .contact-detail h4 { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--black); margin-bottom: 4px; }
+    .contact-detail p, .contact-detail a { font-size: 1rem; color: #555; text-decoration: none; line-height: 1.5; }
+    .contact-detail a:hover { color: var(--blue); }
+    .contact-form .form-group input, .contact-form .form-group textarea { background: var(--white); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--black); border-top: 2px solid var(--blue); padding: 40px 24px; text-align: center; }
+    .footer-logo { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px; }
+    .footer-logo img { height: 44px; }
+    .footer-logo span { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; color: var(--white); letter-spacing: 0.05em; }
+    .footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; list-style: none; }
+    .footer-links a { color: var(--gray-mid); text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--blue-light); }
+    .footer-copy { color: rgba(255,255,255,0.3); font-size: 0.8rem; letter-spacing: 0.05em; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; right: 0; background: rgba(0,0,0,0.97); padding: 20px; gap: 16px; border-bottom: 2px solid var(--blue); }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+      .mission-grid, .about-grid, .signup-grid, .contact-grid { grid-template-columns: 1fr; gap: 36px; }
+      .mission-stats { grid-template-columns: 1fr 1fr; }
+      .about-photo { aspect-ratio: 3/4; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">
+    <img src="FC_LOGO_TRANSPARENT.png" alt="FC Logo"/>
+    <span>FC Youth<br>Baseball</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#mission">Mission</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#donate">Donate</a></li>
+    <li><a href="#signup">Sign Up</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#signup" class="nav-cta">Join the Team</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <img src="FC_LOGO_TRANSPARENT.png" alt="FC Youth Baseball" class="hero-logo"/>
+  <p class="hero-eyebrow">Southern Indiana Youth Baseball</p>
+  <h1 class="hero-title">Every Kid<br><span>Deserves</span><br>to Play</h1>
+  <p class="hero-sub">Free Youth Baseball &bull; Southern Indiana</p>
+  <p class="hero-tagline">No fees. No barriers. Just baseball. We're building a league where every child gets a shot — regardless of what their family can afford.</p>
+  <div class="hero-buttons">
+    <a href="#signup" class="btn btn-primary">Sign Your Child Up</a>
+    <a href="#donate" class="btn btn-outline">Support the Mission</a>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section id="mission">
+  <div class="container">
+    <div class="mission-grid reveal">
+      <div class="mission-text">
+        <p class="section-label">Our Mission</p>
+        <h2 class="section-title">Baseball for <span>Every</span> Kid</h2>
+        <p>There are kids right here in southern Indiana who want to play, who have the drive and the passion — but their families just can't make it happen financially. Registration fees, equipment, uniforms… it adds up fast.</p>
+        <p>FC Youth Baseball was built on one simple belief: <strong>no child should sit on the sidelines because money is tight.</strong></p>
+        <p>We provide completely free participation — no registration fees, no equipment costs, no hidden charges. Just baseball, teamwork, and a community that shows up for its kids.</p>
+        <br/>
+        <a href="#signup" class="btn btn-primary">Get Your Child Involved</a>
+      </div>
+      <div class="mission-stats">
+        <div class="stat-card">
+          <div class="stat-num">$0</div>
+          <div class="stat-label">Cost to Participate</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Community Funded</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">12-14</div>
+          <div class="stat-label">Ages Welcome</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">S. IN</div>
+          <div class="stat-label">Southern Indiana</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="grid-bg" id="gridBg"></div>
+  <div class="container">
+    <div class="about-grid reveal">
+      <div class="about-photo">
+        <img src="hayden.jpg" alt="Hayden Keltner"/>
+      </div>
+      <div class="about-text">
+        <p class="section-label">About Hayden</p>
+        <h2 class="section-title">The Man <span>Behind</span> the Mission</h2>
+        <p>My name is Hayden Keltner, and I'm from right here in southern Indiana — born and raised. Baseball has been a part of my life for as long as I can remember, and this game taught me things that still carry me today.</p>
+        <p>How to fail and get back up. How to be part of something bigger than yourself. How to work hard for something you love.</p>
+        <p>When I started seeing kids in our community missing out on all of that — not because they didn't want it, but because their families were struggling — I knew I had to do something.</p>
+        <p>FC Youth Baseball is my answer to that. This league exists because every kid in southern Indiana deserves a chance to feel what it's like to be part of a team.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DONATE -->
+<section id="donate">
+  <div class="container reveal" style="position:relative; z-index:1;">
+    <p class="section-label">Support Us</p>
+    <h2 class="section-title">Help a Kid<br><span>Get on the Field</span></h2>
+    <p class="donate-desc">Every dollar goes directly toward equipment, uniforms, and field costs so that families never see a bill. Your generosity is what makes this league possible.</p>
+    <div class="donate-placeholder">⚾ Donation Link Coming Soon</div>
+    <br/><br/>
+    <p style="color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-bottom: 24px;">In the meantime, reach out directly to get involved.</p>
+    <a href="#contact" class="btn btn-primary">Get in Touch</a>
+  </div>
+</section>
+
+<!-- SIGN UP -->
+<section id="signup">
+  <div class="container">
+    <div class="signup-grid reveal">
+      <div class="signup-intro">
+        <p class="section-label">Register</p>
+        <h2 class="section-title">Sign Your<br>Child <span>Up</span></h2>
+        <p>Ready to get your kid on the field? Fill out the form and Hayden will reach out to you directly with everything you need to know.</p>
+        <p>There is <strong>no cost</strong> to register. Every child who wants to play has a spot waiting for them.</p>
+      </div>
+      <div>
+        <form id="signupForm">
+          <div class="form-group">
+            <label>Parent / Guardian Name</label>
+            <input type="text" placeholder="Your full name" required/>
+          </div>
+          <div class="form-group">
+            <label>Child's Name</label>
+            <input type="text" placeholder="Child's full name" required/>
+          </div>
+          <div class="form-group">
+            <label>Child's Age</label>
+            <input type="number" placeholder="Age" min="12" max="14" required/>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" placeholder="(555) 000-0000" required/>
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" placeholder="your@email.com" required/>
+          </div>
+          <div class="form-group">
+            <label>City / Town</label>
+            <input type="text" placeholder="Where are you located?" required/>
+          </div>
+          <div class="form-group">
+            <label>Anything else we should know?</label>
+            <textarea placeholder="Previous experience, questions, etc. (optional)"></textarea>
+          </div>
+          <button type="submit" class="form-submit">Submit Registration</button>
+          <div class="form-success" id="signupSuccess">
+            ✅ Thanks! Hayden will be in touch with you soon.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid reveal">
+      <div class="contact-info">
+        <p class="section-label">Contact</p>
+        <h2 class="section-title">Let's <span>Talk</span></h2>
+        <p style="color:#555; line-height:1.7; margin-bottom:32px;">Have questions about the league? Want to volunteer, donate equipment, or sponsor a kid's season? Reach out — Hayden would love to hear from you.</p>
+        <div class="contact-item">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </div>
+          <div class="contact-detail">
+            <h4>Email</h4>
+            <a href="mailto:haydenkeltner.fc@outlook.com">haydenkeltner.fc@outlook.com</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          </div>
+          <div class="contact-detail">
+            <h4>Location</h4>
+            <p>Southern Indiana</p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form">
+        <form id="contactForm">
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" placeholder="Full name" required/>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="your@email.com" required/>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea placeholder="How can Hayden help you?" required></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Message</button>
+          <div class="form-success" id="contactSuccess">
+            ✅ Message sent! Hayden will get back to you soon.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img src="FC_LOGO_TRANSPARENT.png" alt="FC Logo"/>
+    <span>FC Youth Baseball &bull; Southern Indiana</span>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#mission">Mission</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#donate">Donate</a></li>
+    <li><a href="#signup">Sign Up</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <p class="footer-copy">&copy; 2026 FC Youth Baseball. All rights reserved. &bull; <a href="mailto:haydenkeltner.fc@outlook.com" style="color:inherit; text-decoration:none;">haydenkeltner.fc@outlook.com</a></p>
+</footer>
+
+<script>
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Hero baseballs
+  const homeSection = document.getElementById('home');
+  const ballSVG = (size, opacity) => `
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#0078ab" stroke-width="3" opacity="${opacity}"/>
+      <path d="M26,18 C34,28 36,42 34,50 C32,58 28,70 22,80" fill="none" stroke="#0078ab" stroke-width="2.5" stroke-linecap="round" opacity="${opacity}"/>
+      <path d="M74,18 C66,28 64,42 66,50 C68,58 72,70 78,80" fill="none" stroke="#0078ab" stroke-width="2.5" stroke-linecap="round" opacity="${opacity}"/>
+      <path d="M28,22 L32,25 M30,30 L34,33 M31,38 L35,41 M31,46 L35,49 M30,54 L34,57 M28,62 L32,65 M25,70 L29,73" fill="none" stroke="#0078ab" stroke-width="1.5" stroke-linecap="round" opacity="${opacity}"/>
+      <path d="M72,22 L68,25 M70,30 L66,33 M69,38 L65,41 M69,46 L65,49 M70,54 L66,57 M72,62 L68,65 M75,70 L71,73" fill="none" stroke="#0078ab" stroke-width="1.5" stroke-linecap="round" opacity="${opacity}"/>
+    </svg>`;
+
+  const ballConfigs = [
+    { x: 5,  y: 10, size: 90,  speed: 0.5,  rot: 0.8,  opacity: 0.5 },
+    { x: 20, y: 60, size: 55,  speed: 0.9,  rot: -1.2, opacity: 0.3 },
+    { x: 38, y: 25, size: 70,  speed: 0.6,  rot: 1.5,  opacity: 0.4 },
+    { x: 55, y: 75, size: 45,  speed: 1.1,  rot: -0.9, opacity: 0.25 },
+    { x: 70, y: 15, size: 80,  speed: 0.7,  rot: 1.1,  opacity: 0.45 },
+    { x: 82, y: 55, size: 60,  speed: 0.85, rot: -1.4, opacity: 0.35 },
+    { x: 92, y: 30, size: 50,  speed: 1.0,  rot: 0.7,  opacity: 0.3 },
+    { x: 12, y: 80, size: 65,  speed: 0.75, rot: -1.0, opacity: 0.4 },
+    { x: 47, y: 50, size: 40,  speed: 1.2,  rot: 1.8,  opacity: 0.2 },
+    { x: 63, y: 88, size: 75,  speed: 0.65, rot: -0.6, opacity: 0.35 },
+    { x: 30, y: 5,  size: 50,  speed: 0.95, rot: 1.3,  opacity: 0.28 },
+    { x: 78, y: 70, size: 85,  speed: 0.55, rot: -1.6, opacity: 0.42 },
+  ];
+
+  const ballEls = ballConfigs.map(b => {
+    const el = document.createElement('div');
+    el.className = 'hero-ball';
+    el.style.width = b.size + 'px';
+    el.style.height = b.size + 'px';
+    el.style.left = b.x + '%';
+    el.style.top = b.y + '%';
+    el.innerHTML = ballSVG(b.size, b.opacity);
+    homeSection.appendChild(el);
+    return { el, ...b, currentRot: Math.random() * 360 };
+  });
+
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const delta = scrolled - lastScroll;
+    lastScroll = scrolled;
+
+    ballEls.forEach(b => {
+      b.currentRot += delta * b.rot;
+      const yOffset = scrolled * b.speed * -1;
+      b.el.style.transform = `translateY(${yOffset}px) rotate(${b.currentRot}deg)`;
+    });
+  });
+
+  // Parallax grid
+  const gridBg = document.getElementById('gridBg');
+  const aboutSection = document.getElementById('about');
+  window.addEventListener('scroll', () => {
+    const rect = aboutSection.getBoundingClientRect();
+    const offset = (rect.top / window.innerHeight) * 120;
+    gridBg.style.transform = `translateY(${offset}px)`;
+  });
+
+  // Sign up form
+  document.getElementById('signupForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('signupSuccess').style.display = 'block';
+    this.reset();
+  });
+
+  // Contact form
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('contactSuccess').style.display = 'block';
+    this.reset();
+  });
+</script>
+</body>
+</html>
